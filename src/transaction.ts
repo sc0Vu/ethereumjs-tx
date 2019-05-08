@@ -126,14 +126,12 @@ export default class Transaction {
         name: 'r',
         length: 32,
         allowZero: true,
-        allowLess: true,
         default: new Buffer([]),
       },
       {
         name: 's',
         length: 32,
         allowZero: true,
-        allowLess: true,
         default: new Buffer([]),
       },
     ]
@@ -208,9 +206,10 @@ export default class Transaction {
 
       if ((unsigned && seeksReplayProtection) || (!unsigned && meetsAllEIP155Conditions)) {
         const raw = this.raw.slice()
+        const emptyBuffer = toBuffer('')
         this.v = toBuffer(this._chainId)
-        this.r = toBuffer(0)
-        this.s = toBuffer(0)
+        this.raw[7] = emptyBuffer
+        this.raw[8] = emptyBuffer
         items = this.raw
         this.raw = raw
       } else {
